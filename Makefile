@@ -5,7 +5,7 @@ export NO_MKDOCS_2_WARNING := 1
 PORT ?= 8001
 MATERIAL_IMAGE := squidfunk/mkdocs-material:9.8.1
 
-.PHONY: help sync serve build test lint links terms check docker-serve clean
+.PHONY: help sync generate serve build test lint links terms check docker-serve clean
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/ —/'
@@ -13,10 +13,13 @@ help:            ## list targets
 sync:            ## install from uv.lock
 	$(UV) sync --frozen
 
-serve:           ## live preview on http://127.0.0.1:$(PORT)
+generate:        ## write generated/ (latest posts) from the content
+	$(UV) run portfolio generate
+
+serve: generate  ## live preview on http://127.0.0.1:$(PORT) (re-run `make generate` after editing post front matter)
 	$(UV) run mkdocs serve -a 127.0.0.1:$(PORT)
 
-build:           ## strict build into site/
+build: generate  ## strict build into site/
 	$(UV) run mkdocs build --strict
 
 test:            ## unit + build tests
@@ -26,6 +29,7 @@ lint:            ## ruff, format, mypy, codespell
 	$(UV) run ruff check .
 	$(UV) run ruff format --check .
 	$(UV) run mypy
+	$(UV) run lint-imports
 	$(UV) run codespell
 
 links: build     ## relative links in the Markdown sources resolve (offline)
@@ -36,8 +40,8 @@ terms:           ## no forbidden (internal) names in files and commit messages
 
 check: lint test links terms  ## everything CI runs
 
-docker-serve:    ## the same preview in a container (no host Python needed)
+docker-serve:    ## the same preview in a container (needs generated/ from a previous `make generate`)
 	docker run --rm -it -p 127.0.0.1:$(PORT):8000 -v $(CURDIR):/docs $(MATERIAL_IMAGE)
 
 clean:           ## remove build output
-	rm -rf site .cache
+	rm -rf site .cache generated

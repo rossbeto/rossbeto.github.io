@@ -1,0 +1,6 @@
+authors:
+  lam:
+    name: Nguyen Hien Lam
+    description: Senior Software Engineer
+    avatar: assets/img/avatar.svg
+    url: /                         # the author card on posts links to the home page (profile)

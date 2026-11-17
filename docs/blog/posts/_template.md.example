@@ -1,0 +1,23 @@
+---
+date: 2026-12-01
+slug: short-words-from-the-title
+title: A title of at most 60 characters
+description: One sentence (at most 155 characters) for the post list, search results and social previews.
+authors: [lam]
+categories: [Django]
+tags: [two, to-five, tags]
+draft: true            # remove when the review checklist (docs/blog/README.md) is done
+---
+
+# A title of at most 60 characters
+
+The problem in one plain paragraph that a recruiter can follow.
+
+<!-- more -->
+
+## How it showed up
+## Reproduce it
+## Root cause
+## The fix
+## The test that keeps it fixed
+## Lesson
