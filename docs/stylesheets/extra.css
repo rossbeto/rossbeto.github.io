@@ -64,3 +64,16 @@
 
 /* The site title ("A Coder's CV") in a monospace font: the coder theme. */
 .md-header__topic:first-child { font-family: var(--md-code-font-family); }
+
+/* CV: "lab" badge on capabilities shown in a personal lab (lab work is always labelled) */
+.md-typeset a.cv-lab {
+  display: inline-block;
+  padding: 0 0.45em;
+  border: 1px solid currentcolor;
+  border-radius: 0.6em;
+  font-size: 0.7em;
+  font-weight: 700;
+  line-height: 1.5;
+  text-transform: uppercase;
+  vertical-align: 0.15em;
+}

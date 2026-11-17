@@ -42,18 +42,6 @@ theme:
     - content.code.copy
 
 extra:
-  # The profile card in the left column (overrides/partials/profile.html).
-  # Phase 003 moves these values to data/cv.yml (single source).
-  profile:
-    name: Nguyen Hien Lam
-    label: Senior Software Engineer
-    location: Kuala Lumpur, Malaysia
-    image: assets/img/avatar.svg
-    image_alt: Monogram avatar of a coder with glasses
-    links:
-      - { icon: fontawesome/brands/linkedin, name: LinkedIn, url: "https://www.linkedin.com/in/lam-nguyen-723b279/" }
-      - { icon: fontawesome/brands/github, name: GitHub, url: "https://github.com/rossbeto" }
-      - { icon: material/message-text-outline, name: "Contact (GitHub issue)", url: "https://github.com/rossbeto/rossbeto.github.io/issues/new?template=contact.yml" }
   social:
     - { icon: fontawesome/brands/linkedin, link: "https://www.linkedin.com/in/lam-nguyen-723b279/", name: LinkedIn }
     - { icon: fontawesome/brands/github, link: "https://github.com/rossbeto", name: GitHub }

@@ -17,14 +17,22 @@ No Python on the machine? `make docker-serve` runs the same preview in a contain
 
 | Path | What |
 |---|---|
-| `docs/` | the pages (Markdown) and assets |
+| `data/cv.yml` | **the CV**: one source for the CV page, the profile column and the home header (JSON Resume shape) |
+| `docs/` | the pages (Markdown) and assets; `docs/cv/index.md` is generated |
 | `docs/blog/posts/` | blog posts (Material blog plugin); how to write one: `docs/blog/README.md` |
-| `src/portfolio/` | `portfolio generate`: validates post front matter, writes `generated/` (gitignored) |
+| `src/portfolio/` | `portfolio generate`: validates `data/cv.yml` and post front matter, writes the generated files (gitignored) |
 | `generated/` | generated Markdown pulled into pages with `pymdownx.snippets` (home: latest posts) |
 | `overrides/` | Material theme overrides: the profile column on the left of every page |
 | `mkdocs.yml` | site configuration, navigation, the profile values |
 | `tests/` | the site builds in strict mode; the profile is on every page; no email or placeholder is published |
 | `scripts/` | offline link check, forbidden-terms check (hashed list) |
+
+## Edit the CV
+
+Edit `data/cv.yml`, then `make generate` (or `make serve`, which runs it once at start; re-run
+`make generate` while it is running). Validation names the field: `work[0].highlights[1]:
+placeholder '[X]'`. Capabilities shown only in a personal lab carry `proof: projects/<page>.md`
+and get a **lab** badge. No email or phone: the site never publishes them.
 
 ## Add a post
 

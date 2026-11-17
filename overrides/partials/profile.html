@@ -1,6 +1,6 @@
 {#- The profile card at the top of the left column, on every page (D-03).
-    Values: config.extra.profile (Phase 003 fills it from data/cv.yml). -#}
-{% set profile = config.extra.profile %}
+    Values: profile_data.html, generated from data/cv.yml by `portfolio generate`. -#}
+{% from "partials/profile_data.html" import profile %}
 <div class="profile" aria-label="About the author">
   <img class="profile__avatar" src="{{ profile.image | url }}" alt="{{ profile.image_alt }}" width="96" height="96">
   <p class="profile__name">{{ profile.name }}</p>

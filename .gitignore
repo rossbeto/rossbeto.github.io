@@ -8,3 +8,5 @@ __pycache__/
 .coverage
 coverage.xml
 generated/
+docs/cv/index.md
+overrides/partials/profile_data.html

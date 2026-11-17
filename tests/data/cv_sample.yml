@@ -1,0 +1,43 @@
+basics:
+  name: Ada Example
+  label: Backend Engineer
+  x_tagline: Builds things | carefully
+  image: assets/img/avatar.svg
+  x_image_alt: An avatar
+  location: { city: Penang, region: Malaysia }
+  summary: [First paragraph., "Second paragraph with a [link](https://example.org)."]
+  profiles:
+    - { network: GitHub, url: "https://github.com/example", x_icon: fontawesome/brands/github }
+x_capabilities:
+  - { title: Work skill, text: From a job. }
+  - { title: Lab skill, text: From a lab., proof: projects/demo.md }
+  - { title: Draft skill, text: Not yet., x_hidden: true }
+x_recent:
+  - { title: Learning, text: Something new. }
+skills:
+  - { name: Languages, keywords: [Python, "C|D"], x_earlier: [Java] }
+  - { name: Cloud, keywords: [AWS] }
+x_work_intro: Engineer since 2010.
+work:
+  - name: Current Co
+    position: Senior Engineer
+    location: Penang
+    startDate: 2020-03
+    highlights: [Did a thing., Did another thing.]
+  - name: Old Co
+    position: Engineer
+    location: Hanoi
+    startDate: 2010-01
+    endDate: 2020-02
+    summary: A short summary.
+    highlights: [Shipped it.]
+  - name: Secret Co
+    position: Draft
+    location: Nowhere
+    startDate: 2009-01
+    endDate: 2009-12
+    highlights: [Hidden.]
+    x_hidden: true
+education:
+  - { institution: Some University, studyType: BSc, area: Computer Science }
+  - { institution: Other University }

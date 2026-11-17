@@ -1,11 +1,13 @@
 """Integration: the whole site builds in strict mode, and the profile column is on every page."""
 
+import html
 import re
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE = 'class="profile"'
@@ -100,3 +102,24 @@ def test_posts_are_published_and_listed(site: Path, slug: str, day: str) -> None
 def test_author_notes_and_templates_are_not_published(site: Path) -> None:
     assert not list(site.rglob("README*"))
     assert not list(site.rglob("*.example"))
+
+
+def test_cv_page_and_profile_come_from_the_data_file(site: Path) -> None:
+    data = yaml.safe_load((ROOT / "data" / "cv.yml").read_text())
+    cv = (site / "cv" / "index.html").read_text()
+    first = data["work"][0]
+    assert first["name"] in cv
+    assert html.escape(first["highlights"][0].split(" used by")[0], quote=False) in cv
+    label = f'<p class="profile__label">{data["basics"]["label"]}</p>'
+    assert label in (site / "blog" / "index.html").read_text()  # the profile column, any page
+    assert data["basics"]["name"] in (site / "index.html").read_text()  # home header (phones)
+
+
+def test_cv_lab_items_are_labelled_and_link_to_projects(site: Path) -> None:
+    cv = (site / "cv" / "index.html").read_text()
+    assert cv.count('class="cv-lab"') == sum(
+        1
+        for c in yaml.safe_load((ROOT / "data" / "cv.yml").read_text())["x_capabilities"]
+        if c.get("proof")
+    )
+    assert 'href="../projects/"' in cv

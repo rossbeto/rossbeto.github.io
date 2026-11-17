@@ -1,7 +1,8 @@
 """Composition root: `portfolio generate`. Paths and file writes only; no logic.
 
-Output goes to `generated/` (gitignored), outside docs/, and is pulled into pages with
-`pymdownx.snippets`, so it is never built as a page of its own.
+Outputs (all gitignored): `docs/cv/index.md` (a page), `overrides/partials/profile_data.html`
+(the profile column's values), and snippets in `generated/`, outside docs/, pulled into pages
+with `pymdownx.snippets` so they are never built as pages of their own.
 """
 
 import argparse
@@ -10,7 +11,8 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from portfolio.blog.frontmatter import FrontMatterError
-from portfolio.build import build_latest_posts
+from portfolio.build import build_cv, build_latest_posts
+from portfolio.cv.load import CVError
 
 
 def _write(path: Path, text: str) -> None:
@@ -20,7 +22,13 @@ def _write(path: Path, text: str) -> None:
 
 
 def generate(root: Path) -> None:
-    _write(root / "generated" / "latest-posts.md", build_latest_posts(root / "docs"))
+    """Every output is gitignored; all of them are written only after all inputs validate."""
+    cv = build_cv(root / "data" / "cv.yml")
+    latest = build_latest_posts(root / "docs")
+    _write(root / "docs" / "cv" / "index.md", cv.page)
+    _write(root / "overrides" / "partials" / "profile_data.html", cv.profile)
+    _write(root / "generated" / "home-profile.md", cv.home_header)
+    _write(root / "generated" / "latest-posts.md", latest)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -31,7 +39,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         generate(args.root)
-    except FrontMatterError as exc:
+    except (CVError, FrontMatterError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0

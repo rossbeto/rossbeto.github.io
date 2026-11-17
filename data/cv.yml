@@ -1,0 +1,194 @@
+# The single source for the CV page, the profile column and the home header (and the PDF from
+# Phase 005). JSON Resume shape (https://jsonresume.org/schema) plus `x_` extensions.
+# `portfolio generate` validates it (src/portfolio/cv/model.py): unknown keys, bad dates and
+# `[...]` gaps that are not Markdown links stop the build with the field path.
+# Public site: no email, no phone (D-12); no internal product or code names.
+
+basics:
+  name: Nguyen Hien Lam
+  label: Senior Software Engineer
+  x_tagline: Senior software builder, production support
+  image: assets/img/avatar.svg
+  x_image_alt: Monogram avatar of a coder with glasses
+  location:
+    city: Kuala Lumpur
+    region: Malaysia
+  summary:
+    - >-
+      I have been working with software professionally since 2006. I started with Java, and
+      over the years, in different organizations, I had the chance to work on different tech
+      stacks: Python, .NET, Android and iOS, using them to build products that serve millions
+      of customers.
+    - >-
+      Experience across different tech stacks lets me understand new systems and the business
+      behind them quickly, and work effectively with teams of different backgrounds. I pick up
+      unfamiliar tools quickly by mapping them to patterns I already know: concepts like
+      transactions, caching, retries and isolation carry over across languages and frameworks.
+    - I have worked in Malaysia since 2010, mainly with international teams and organizations.
+  profiles:
+    - network: LinkedIn
+      url: https://www.linkedin.com/in/lam-nguyen-723b279/
+      x_icon: fontawesome/brands/linkedin
+    - network: GitHub
+      username: rossbeto
+      url: https://github.com/rossbeto
+      x_icon: fontawesome/brands/github
+    - network: Contact (GitHub issue)
+      url: https://github.com/rossbeto/rossbeto.github.io/issues/new?template=contact.yml
+      x_icon: material/message-text-outline
+
+# "What I do". `proof` (a page under docs/) marks a capability shown in a personal lab: it gets
+# a "lab" badge linking there. Entries without `proof` come from paid work.
+x_capabilities:
+  - title: Breaking up a monolith
+    text: >-
+      Decomposed a legacy monolith into smaller domain-based microservices, each with its own
+      data store and API.
+  - title: Live data migration with zero downtime
+    text: >-
+      Dual writes to both systems, idempotent backfill scripts for millions of records,
+      consistency checks, and a reversible step-by-step cut-over.
+  - title: Multi-tenant SaaS platforms
+    text: >-
+      Per-customer data separation, sharding, per-customer branding, languages and email
+      templates.
+    proof: projects/index.md
+  - title: Embeddable web apps for partner sites
+    text: >-
+      Iframe security, sessions without third-party cookies, protection against being framed
+      by other sites.
+    proof: projects/index.md
+  - title: APIs that stay correct under load
+    text: >-
+      API keys, rate limiting and lockout, safe retries (idempotency), protection against lost
+      updates.
+    proof: projects/index.md
+  - title: Read replicas without losing fresh data
+    text: >-
+      Read-your-writes on databases with replicas, plus safe transactions across several
+      databases.
+    proof: projects/index.md
+  - title: Deploys without Kubernetes
+    text: >-
+      Reproducible packages, deploys that switch versions without downtime, health checks,
+      automatic rollback, systemd hardening.
+    proof: projects/index.md
+  - title: CI/CD and supply-chain security
+    text: >-
+      GitHub Actions, image scanning, SBOM and provenance, Dependabot, a test matrix across
+      database engines.
+    proof: projects/index.md
+  - title: Maintainable codebases
+    text: >-
+      Layered architecture enforced by automated checks, fast tests without a database,
+      decision records.
+    proof: projects/index.md
+
+# "Recently"
+x_recent:
+  - title: AI-driven development
+    text: >-
+      Writing clear specs and plans for coding agents, steering and reviewing agent work,
+      managing context in long multi-step tasks.
+  - title: Knowing model limits
+    text: >-
+      Context window size, made-up answers (hallucination), confident but wrong output, and when
+      to use a bigger or a smaller model.
+  - title: Tool integration
+    text: MCP servers, function or tool calling, agents with scoped tools.
+
+skills:
+  - name: Languages
+    keywords: [Python, JavaScript, SQL, Shell scripting]
+    x_earlier: ['C#', Java, Kotlin, Swift, Objective-C]
+  - name: Backend frameworks
+    keywords: ['Django (+ DRF, GraphQL/Graphene)', FastAPI, Starlette, Celery/RabbitMQ]
+    x_earlier: [ASP.NET]
+  - name: Frontend and mobile
+    keywords: [Vue.js, HTML/CSS, Jinja2]
+    x_earlier: [Android, iOS, Angular]
+  - name: "AWS: compute and integration"
+    keywords: [Lambda, API Gateway, SQS, SNS, Kinesis/Firehose]
+  - name: "AWS: data"
+    keywords: [DynamoDB, RDS, S3]
+  - name: "AWS: security"
+    keywords: ['IAM (roles, policies, permission boundaries)', KMS, Secrets Manager, WAF, Shield, ACM]
+  - name: "AWS: network, delivery, IaC"
+    keywords: [VPC, CloudFront, Route 53, CloudFormation]
+  - name: DevOps
+    keywords: [Docker/Compose, Linux, nginx, systemd, Jenkins, GitHub Actions, Trivy, SBOM]
+  - name: Testing and quality
+    keywords: [pytest, Playwright, mypy, ruff, import-linter]
+  - name: AI-assisted development
+    keywords: [coding agents, spec-driven development, guardrails, context management]
+
+x_work_intro: >-
+  Software engineer since 2006: backend, cloud and mobile, with tech-lead and client-facing
+  roles.
+
+work:
+  - name: F-Secure Malaysia
+    position: Senior Software Engineer, Core team
+    location: Kuala Lumpur
+    startDate: 2019-09
+    highlights:
+      - >-
+        Built and maintained backend microservices in Python and Django used by F-Secure's
+        Android, iOS, desktop and web clients.
+      - >-
+        Designed serverless services on AWS with Lambda, API Gateway, SQS, SNS, DynamoDB and
+        Kinesis/Firehose.
+      - >-
+        Secured cloud resources with least-privilege IAM (roles, policies, permission
+        boundaries), KMS encryption, Secrets Manager and WAF/Shield.
+      - >-
+        Infrastructure as code with CloudFormation; automated builds and deploys with Jenkins
+        and GitHub Actions.
+      - >-
+        Improved performance and reliability with Redis caching and distributed locking, and
+        RabbitMQ background jobs.
+  - name: Exact Software Malaysia
+    position: Senior Software Engineer / Tech Lead
+    location: Kuala Lumpur
+    startDate: 2012-07
+    endDate: 2019-08
+    highlights:
+      - >-
+        Developed features for Exact Online, a cloud ERP on .NET (C#, ASP.NET, SQL Server),
+        including query optimization and indexing for reporting.
+      - Promoted to Tech Lead of a Scrum team owning the Professional Services package.
+      - >-
+        Co-founded the KL mobile team in 2015 as one of its first two developers. The team grew
+        to 7 members. I built Android (Java/Kotlin) and iOS (Swift/Objective-C) apps and their
+        backend APIs.
+      - Won the Exact Hackathon twice (2015, 2017) out of 4 entries.
+  - name: FPT Software
+    position: Project Coordinator
+    location: Kuala Lumpur
+    startDate: 2009-10
+    endDate: 2012-06
+    highlights:
+      - >-
+        Linked Malaysian clients with the offshore team in Vietnam: gathered functional and
+        non-functional requirements, managed timeline, budget and technical choices, ran user
+        acceptance testing to client sign-off, and handled deployment.
+  - name: Eureka Software
+    position: Software Engineer
+    location: Vietnam
+    startDate: 2007-07
+    endDate: 2009-07
+    highlights:
+      - Developed web applications in Ruby on Rails and ASP.NET.
+  - name: FPT Software
+    position: Software Engineer
+    location: Vietnam
+    startDate: 2006-06
+    endDate: 2007-07
+    highlights:
+      - >-
+        Java/J2EE developer on outsourcing projects, starting full-time in my final university
+        year. Rejoined in 2009 and relocated to Malaysia (above).
+
+education:
+  - institution: The University of Technology of Da Nang
+  - institution: The University of Economics of Da Nang

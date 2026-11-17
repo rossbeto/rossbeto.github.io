@@ -3,10 +3,7 @@ hide:
   - toc
 ---
 
-<div class="home-profile" markdown>
-![Monogram avatar of a coder with glasses](assets/img/avatar.svg)
-<p><strong>Nguyen Hien Lam</strong><br>Senior Software Engineer · Kuala Lumpur</p>
-</div>
+--8<-- "home-profile.md"
 
 # Hello, I build backend systems that keep working
 

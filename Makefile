@@ -22,8 +22,8 @@ serve: generate  ## live preview on http://127.0.0.1:$(PORT) (re-run `make gener
 build: generate  ## strict build into site/
 	$(UV) run mkdocs build --strict
 
-test:            ## unit + build tests
-	$(UV) run pytest
+test:            ## unit + build tests; coverage gate on the generator package
+	$(UV) run pytest --cov=portfolio --cov-report=term-missing:skip-covered --cov-fail-under=95
 
 lint:            ## ruff, format, mypy, codespell
 	$(UV) run ruff check .

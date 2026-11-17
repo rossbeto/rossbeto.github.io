@@ -43,6 +43,7 @@ extend-exclude = ["site"]
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "PL"]
 ignore = ["PLR2004"]
+allowed-confusables = ["–"]  # date ranges: "Sep 2019 – Present"
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S101", "S603", "S607", "PLR0913"]
@@ -53,7 +54,7 @@ files = ["src", "scripts/forbidden_terms.py", "scripts/check_links.py"]
 
 [tool.codespell]
 skip = "./site,./.venv,./uv.lock,*.svg,*.sha256"
-ignore-words-list = "hien"
+ignore-words-list = "hien,fpt"
 
 [tool.importlinter]
 root_package = "portfolio"
@@ -62,8 +63,21 @@ include_external_packages = true
 [[tool.importlinter.contracts]]
 name = "models and renderers do no I/O (only the adapters read files or YAML)"
 type = "forbidden"
-source_modules = ["portfolio.model", "portfolio.blog.model", "portfolio.blog.latest"]
-forbidden_modules = ["yaml", "portfolio.blog.frontmatter", "portfolio.build", "portfolio.cli"]
+source_modules = [
+    "portfolio.model",
+    "portfolio.blog.model",
+    "portfolio.blog.latest",
+    "portfolio.cv.model",
+    "portfolio.cv.render",
+]
+forbidden_modules = [
+    "yaml",
+    "weasyprint",
+    "portfolio.blog.frontmatter",
+    "portfolio.cv.load",
+    "portfolio.build",
+    "portfolio.cli",
+]
 
 [[tool.importlinter.contracts]]
 name = "the generator is independent of the site builder"
@@ -74,4 +88,11 @@ forbidden_modules = ["mkdocs", "material"]
 [[tool.importlinter.contracts]]
 name = "layers: cli -> build -> adapters -> renderers/models"
 type = "layers"
-layers = ["portfolio.cli", "portfolio.build", "portfolio.blog.frontmatter", "portfolio.blog.latest", "portfolio.blog.model", "portfolio.model"]
+layers = [
+    "portfolio.cli",
+    "portfolio.build",
+    "portfolio.blog.frontmatter | portfolio.cv.load",
+    "portfolio.blog.latest | portfolio.cv.render",
+    "portfolio.blog.model | portfolio.cv.model",
+    "portfolio.model",
+]
