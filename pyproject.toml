@@ -1,0 +1,53 @@
+[project]
+name = "portfolio"
+version = "0.1.0"
+description = "A Coder's CV: portfolio site generator and content (MkDocs + Material)"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = [
+    "jinja2>=3.1",
+    "mkdocs==1.6.1",
+    "mkdocs-material==9.8.1",
+    "pydantic>=2.14",
+    "pyyaml>=6.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.3,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "codespell>=2.4",
+    "import-linter>=2.5",
+    "mypy>=1.18",
+    "pytest>=9",
+    "pytest-cov>=7",
+    "ruff>=0.14",
+    "types-pyyaml>=6.0.12.20261113",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "scripts/tests"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["site"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "PL"]
+ignore = ["PLR2004"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101", "S603", "S607", "PLR0913"]
+
+[tool.mypy]
+strict = true
+files = ["src", "scripts/forbidden_terms.py", "scripts/check_links.py"]
+
+[tool.codespell]
+skip = "./site,./.venv,./uv.lock,*.svg,*.sha256"
+ignore-words-list = "hien"

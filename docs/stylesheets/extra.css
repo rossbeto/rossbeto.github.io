@@ -1,0 +1,66 @@
+/* Profile card in the left column (overrides/partials/profile.html). */
+.profile {
+  padding: 0.4rem 0.8rem 0.9rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+.profile__avatar {
+  display: block;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  margin-bottom: 0.6rem;
+  /* a faint ring keeps the black avatar visible on the dark (slate) background */
+  box-shadow: 0 0 0 2px var(--md-default-fg-color--lightest);
+}
+.profile__name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--md-default-fg-color);
+}
+.profile__label,
+.profile__location {
+  margin: 0.1rem 0 0;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+.profile__links {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  font-size: 0.7rem;
+}
+.profile__links li { margin: 0.25rem 0; }
+.profile__links a { color: var(--md-default-fg-color--light); }
+.profile__links a:hover,
+.profile__links a:focus { color: var(--md-accent-fg-color); }
+.profile__icon svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.4rem;
+  vertical-align: -0.15rem;
+  fill: currentColor;
+}
+
+/* Home: a compact profile header, only where the left column is hidden in the drawer (phones,
+   small tablets: Material's breakpoint is 76.25em). */
+.home-profile { display: none; }
+@media screen and (max-width: 76.1875em) {
+  .home-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .home-profile img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--md-default-fg-color--lightest);
+  }
+  .home-profile p { margin: 0; line-height: 1.3; }
+}
+
+/* The site title ("A Coder's CV") in a monospace font: the coder theme. */
+.md-header__topic:first-child { font-family: var(--md-code-font-family); }

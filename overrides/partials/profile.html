@@ -1,0 +1,18 @@
+{#- The profile card at the top of the left column, on every page (D-03).
+    Values: config.extra.profile (Phase 003 fills it from data/cv.yml). -#}
+{% set profile = config.extra.profile %}
+<div class="profile" aria-label="About the author">
+  <img class="profile__avatar" src="{{ profile.image | url }}" alt="{{ profile.image_alt }}" width="96" height="96">
+  <p class="profile__name">{{ profile.name }}</p>
+  <p class="profile__label">{{ profile.label }}</p>
+  {% if profile.location %}<p class="profile__location">{{ profile.location }}</p>{% endif %}
+  <ul class="profile__links">
+    {% for link in profile.links %}
+      <li>
+        <a href="{{ link.url }}"{% if link.url.startswith("http") %} rel="noopener"{% endif %}>
+          <span class="profile__icon">{% include ".icons/" ~ link.icon ~ ".svg" %}</span>{{ link.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

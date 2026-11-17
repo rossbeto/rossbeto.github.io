@@ -1,0 +1,16 @@
+# SHA-256 of forbidden terms, normalised: lowercase, letters and digits only ("Foo-Bar" -> "foobar").
+# The plain list is NOT in this public repository. Company names are allowed on this site (it is
+# a CV); internal product/code names and the work account name are not. Add a term with:
+#   scripts/forbidden_terms.py hash 'Some Name' >> scripts/forbidden-terms.sha256
+9a5680bc795e3d3ba43c47e256fc44984885c62e863092d81be6c969e998fe0f
+dfe55390fb67219ab52e6513ac9e04b9b35fe9c998d67a9492e10761bff0f140
+e3ab9bcad10ed0ae9f88aa25eea73024fb08c8484239036e1ec50b2126a4957f
+22c0b1a13d4e8c8f4a9ec3bde9bdd1c3ef0d0265818ab964638cf4efe5f213f2
+191f24e8a50077ebb1b262aeba70b908fa6061586e0c21cbfdc17af2f86d9056
+698f9fe357357c5bd1297df4ff7aa06e60da85c4ed84852036d5514938b2feae
+6df87f4074da1af52b05f0e53b285cd696169a61e06aa1895eb958140a057a61
+6f794f070ba399fc7dc51b11285667b411904a237af8bc9f5563b6c11880742c
+f00311f7dcd33a6bb208a15adf4702f8b75827a1cb5c5f8ce8d9c6afc12ad8d1
+cc371d65ae16201a7c4726a6c7fc59c4b62a07644ed85fb026784395dd1566af
+bb00a37f22728068384015a56f90d31d82b095e32e0b912955d72ca0226c915b
+ac23c326d6c9a8cecb27ae41dfef3015be56746149ba6c3d870cd295becb9e05

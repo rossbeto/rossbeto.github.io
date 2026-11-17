@@ -1,0 +1,10 @@
+{#- Friendly not-found page (GitHub Pages serves /404.html for unknown paths). -#}
+{% extends "main.html" %}
+{% block content %}
+  <h1>Page not found</h1>
+  <p>This page doesn't exist (or not yet). Try the
+    <a href="{{ config.site_url }}">home page</a>,
+    the <a href="{{ config.site_url }}cv/">CV</a>,
+    the <a href="{{ config.site_url }}projects/">projects</a> or
+    the <a href="{{ config.site_url }}blog/">blog</a>.</p>
+{% endblock %}

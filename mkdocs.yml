@@ -1,0 +1,91 @@
+# A Coder's CV: personal portfolio (plan: prj_porfolio_mk/plan/masterplan.md)
+site_name: A Coder's CV
+site_url: https://rossbeto.github.io/
+site_description: Senior software engineer. Backend and cloud systems, multi-tenant platforms, deploy automation, and the labs that prove it.
+repo_url: https://github.com/rossbeto/rossbeto.github.io
+repo_name: rossbeto.github.io
+edit_uri: ""                         # no "edit this page" button
+copyright: "Content and code under the MIT licence"
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: en
+  logo: assets/img/avatar.svg
+  favicon: assets/img/avatar.svg
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle: { icon: material/weather-night, name: Switch to dark mode }
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle: { icon: material/weather-sunny, name: Switch to light mode }
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.instant
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra:
+  # The profile card in the left column (overrides/partials/profile.html).
+  # Phase 003 moves these values to data/cv.yml (single source).
+  profile:
+    name: Nguyen Hien Lam
+    label: Senior Software Engineer
+    location: Kuala Lumpur, Malaysia
+    image: assets/img/avatar.svg
+    image_alt: Monogram avatar of a coder with glasses
+    links:
+      - { icon: fontawesome/brands/linkedin, name: LinkedIn, url: "https://www.linkedin.com/in/lam-nguyen-723b279/" }
+      - { icon: fontawesome/brands/github, name: GitHub, url: "https://github.com/rossbeto" }
+      - { icon: material/message-text-outline, name: "Contact (GitHub issue)", url: "https://github.com/rossbeto/rossbeto.github.io/issues/new?template=contact.yml" }
+  social:
+    - { icon: fontawesome/brands/linkedin, link: "https://www.linkedin.com/in/lam-nguyen-723b279/", name: LinkedIn }
+    - { icon: fontawesome/brands/github, link: "https://github.com/rossbeto", name: GitHub }
+  generator: false                   # no "Made with Material for MkDocs" line
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - CV: cv/index.md
+  - Projects: projects/index.md
+  - Blog: blog/index.md
+
+# `mkdocs build --strict` turns these warnings into errors.
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: warn
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: warn
+    unrecognized_links: warn

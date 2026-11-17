@@ -1,0 +1,34 @@
+name: Get in touch
+description: Send me a message (job opportunity, question about a project, feedback on a post).
+title: "Contact: "
+labels: [contact]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reaching out! **Issues are public**: please don't include phone numbers,
+        email addresses or anything confidential. If you'd like to continue privately, say so and
+        leave your LinkedIn profile; I'll contact you there.
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - Job opportunity
+        - Question about a project or post
+        - Feedback on the site
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: message
+    attributes:
+      label: Message
+      placeholder: Who you are, and what you'd like to talk about.
+    validations:
+      required: true
+  - type: input
+    id: linkedin
+    attributes:
+      label: Your LinkedIn profile (optional)
+      placeholder: https://www.linkedin.com/in/…
