@@ -77,3 +77,13 @@
   text-transform: uppercase;
   vertical-align: 0.15em;
 }
+
+/* Project cards: a cropped, fixed-height preview instead of the full screenshot */
+.md-typeset .grid.cards img {
+  display: block;
+  width: 100%;
+  max-height: 14rem;
+  object-fit: cover;
+  object-position: top left;
+  border-radius: 0.2rem;
+}

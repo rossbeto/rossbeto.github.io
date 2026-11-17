@@ -16,6 +16,7 @@ SECTIONS = [
     "index.html",
     "cv/index.html",
     "projects/index.html",
+    "projects/tenantlab/index.html",
     "blog/index.html",
     "blog/tags/index.html",
     "404.html",
@@ -122,4 +123,29 @@ def test_cv_lab_items_are_labelled_and_link_to_projects(site: Path) -> None:
         for c in yaml.safe_load((ROOT / "data" / "cv.yml").read_text())["x_capabilities"]
         if c.get("proof")
     )
-    assert 'href="../projects/"' in cv
+    assert 'href="../projects/tenantlab/"' in cv
+
+
+def test_projects_index_and_home_show_the_featured_card(site: Path) -> None:
+    index = (site / "projects" / "index.html").read_text()
+    assert 'href="tenantlab/"' in index
+    assert "Personal lab" in index
+    home = (site / "index.html").read_text()
+    assert 'href="projects/tenantlab/"' in home
+    assert 'loading="lazy"' in home
+
+
+def test_private_repositories_are_never_linked(site: Path) -> None:
+    private = []
+    for page in (ROOT / "docs" / "projects").glob("*.md"):
+        meta = yaml.safe_load(page.read_text().split("---")[1]) if page.name != "index.md" else {}
+        if meta and not meta.get("repo_public"):
+            private.append(meta["repo"])
+    assert private  # tenantlab is private today; this test must check something
+    leaks = [
+        f"{p.relative_to(site)}: {repo}"
+        for p in _pages(site)
+        for repo in private
+        if repo in p.read_text()
+    ]
+    assert leaks == []

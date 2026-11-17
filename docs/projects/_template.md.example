@@ -1,0 +1,27 @@
+---
+title: "short-name: what it is in a few words"   # ≤ 60 characters
+summary: One or two sentences for the card (≤ 160 characters).
+stage: active                  # active | done | archived (not `status`: Material reserves it)
+kind: lab                       # lab | work-public | oss  (labs are labelled as labs)
+repo: https://github.com/rossbeto/<repo>
+repo_public: false              # the site links the repo only when true (tested)
+image: assets/projects/<slug>/poster.png   # ≤ 300 KB; GIFs ≤ 1 MB
+image_alt: What the image shows
+tags: [two, to, eight, tags]
+featured: false                 # featured projects appear on the home page (max 3)
+order: 100                      # lower comes first
+---
+
+# short-name: what it is in a few words
+
+!!! info "A personal lab"
+    One line on what kind of project this is, and that its numbers are test numbers.
+
+## The problem
+## What I built
+## What it demonstrates
+| Claim | Proof (test) |
+|---|---|
+## Hard parts and lessons
+## Tech
+## Links

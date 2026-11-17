@@ -168,3 +168,7 @@ commands, tests and background jobs, where there is no request at all. A contrac
 
 Tie request state to the request's lifetime: set it in the outermost middleware and reset it in
 `finally`. And reproduce a bug as a passing "the bug exists" test before you fix it.
+
+---
+
+*The code and tests are part of my [tenantlab](../../projects/tenantlab.md) lab.*

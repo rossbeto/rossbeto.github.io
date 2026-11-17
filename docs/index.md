@@ -34,7 +34,11 @@ Personal projects where I build a complete system end to end, with the tests to 
 - **Deploys that roll back by themselves**, built without Kubernetes, tested without root.
 - **CI and supply-chain security**: pinned dependencies, image scanning, SBOM.
 
-The write-ups are coming to [Projects](projects/index.md); the stories behind them are on the
+## Featured project
+
+--8<-- "featured-projects.md"
+
+All write-ups are under [Projects](projects/index.md); the stories behind them are on the
 [Blog](blog/index.md).
 
 ## Latest posts

@@ -19,6 +19,7 @@ No Python on the machine? `make docker-serve` runs the same preview in a contain
 |---|---|
 | `data/cv.yml` | **the CV**: one source for the CV page, the profile column and the home header (JSON Resume shape) |
 | `docs/` | the pages (Markdown) and assets; `docs/cv/index.md` is generated |
+| `docs/projects/` | one page per project (front matter feeds the generated index and home cards) |
 | `docs/blog/posts/` | blog posts (Material blog plugin); how to write one: `docs/blog/README.md` |
 | `src/portfolio/` | `portfolio generate`: validates `data/cv.yml` and post front matter, writes the generated files (gitignored) |
 | `generated/` | generated Markdown pulled into pages with `pymdownx.snippets` (home: latest posts) |
@@ -33,6 +34,18 @@ Edit `data/cv.yml`, then `make generate` (or `make serve`, which runs it once at
 `make generate` while it is running). Validation names the field: `work[0].highlights[1]:
 placeholder '[X]'`. Capabilities shown only in a personal lab carry `proof: projects/<page>.md`
 and get a **lab** badge. No email or phone: the site never publishes them.
+
+## Add a project
+
+1. Copy `docs/projects/_template.md.example` to `docs/projects/<slug>.md` and fill in the front
+   matter (`stage`, not `status`: Material reserves that key). Keep `repo_public: false` until
+   the repository is public; the site then never links to it (a test checks).
+2. Put media under `docs/assets/projects/<slug>/` (GIFs ≤ 1 MB, other images ≤ 300 KB; a test
+   checks) and use a small poster image for the card.
+3. Add one line under `Projects` in the `nav` of `mkdocs.yml` (the strict build fails if you
+   forget), then `make check`.
+
+`featured: true` puts the card on the home page (up to 3).
 
 ## Add a post
 

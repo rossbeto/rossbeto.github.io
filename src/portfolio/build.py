@@ -7,6 +7,8 @@ from portfolio.blog.frontmatter import read_posts
 from portfolio.blog.latest import render_latest
 from portfolio.cv.load import load_cv
 from portfolio.cv.render import render_cv_markdown, render_home_header, render_profile_data
+from portfolio.projects.frontmatter import read_projects
+from portfolio.projects.index import render_featured, render_project_index
 
 
 @dataclass(frozen=True)
@@ -27,3 +29,14 @@ def build_cv(cv_file: Path, *, pdf_url: str | None = None) -> CVOutputs:
         profile=render_profile_data(cv),
         home_header=render_home_header(cv),
     )
+
+
+@dataclass(frozen=True)
+class ProjectOutputs:
+    index: str  # docs/projects/index.md
+    featured: str  # generated/featured-projects.md
+
+
+def build_projects(docs_dir: Path) -> ProjectOutputs:
+    projects = read_projects(docs_dir)
+    return ProjectOutputs(index=render_project_index(projects), featured=render_featured(projects))

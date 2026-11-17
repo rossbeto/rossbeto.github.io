@@ -69,12 +69,16 @@ source_modules = [
     "portfolio.blog.latest",
     "portfolio.cv.model",
     "portfolio.cv.render",
+    "portfolio.projects.model",
+    "portfolio.projects.index",
 ]
 forbidden_modules = [
     "yaml",
     "weasyprint",
+    "portfolio.frontmatter",
     "portfolio.blog.frontmatter",
     "portfolio.cv.load",
+    "portfolio.projects.frontmatter",
     "portfolio.build",
     "portfolio.cli",
 ]
@@ -91,8 +95,9 @@ type = "layers"
 layers = [
     "portfolio.cli",
     "portfolio.build",
-    "portfolio.blog.frontmatter | portfolio.cv.load",
-    "portfolio.blog.latest | portfolio.cv.render",
-    "portfolio.blog.model | portfolio.cv.model",
+    "portfolio.blog.frontmatter | portfolio.cv.load | portfolio.projects.frontmatter",
+    "portfolio.frontmatter",
+    "portfolio.blog.latest | portfolio.cv.render | portfolio.projects.index",
+    "portfolio.blog.model | portfolio.cv.model | portfolio.projects.model",
     "portfolio.model",
 ]

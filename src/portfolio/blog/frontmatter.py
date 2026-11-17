@@ -1,30 +1,11 @@
-"""Adapter: read posts from disk (the only module here that touches files or YAML)."""
+"""Adapter: read posts from disk."""
 
 from pathlib import Path
 
-import yaml
-
 from portfolio.blog.model import Post, PostMeta
+from portfolio.frontmatter import FrontMatterError, split_front_matter
 
-FENCE = "---"
-
-
-class FrontMatterError(ValueError):
-    """A post without a readable front-matter block; the message names the file."""
-
-
-def split_front_matter(text: str, name: str) -> dict[str, object]:
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != FENCE:
-        raise FrontMatterError(f"{name}: no front matter (the first line must be '---')")
-    try:
-        end = next(i for i, line in enumerate(lines[1:], 1) if line.strip() == FENCE)
-    except StopIteration:
-        raise FrontMatterError(f"{name}: front matter is not closed with '---'") from None
-    data = yaml.safe_load("\n".join(lines[1:end])) or {}
-    if not isinstance(data, dict):
-        raise FrontMatterError(f"{name}: front matter is not a mapping")
-    return data
+__all__ = ["FrontMatterError", "read_posts", "split_front_matter"]
 
 
 def read_posts(docs_dir: Path, posts_dir: str = "blog/posts") -> list[Post]:

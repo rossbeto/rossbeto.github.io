@@ -154,3 +154,7 @@ leave no enabled site behind.
 
 A rehearsal proves the logic, not the host. Each real run that surprises you should end with a
 fake that's closer to reality, and a test that fails the way the real system failed.
+
+---
+
+*The deploy tool is part of my [tenantlab](../../projects/tenantlab.md) lab.*

@@ -84,7 +84,9 @@ markdown_extensions:
 nav:
   - Home: index.md
   - CV: cv/index.md
-  - Projects: projects/index.md
+  - Projects:                       # one line per project page (strict build fails if missing)
+      - projects/index.md
+      - tenantlab: projects/tenantlab.md
   - Blog:
       - blog/index.md
       - Tags: blog/tags.md

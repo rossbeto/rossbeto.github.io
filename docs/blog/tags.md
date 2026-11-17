@@ -1,5 +1,5 @@
 # Tags
 
-Posts by topic.
+Posts and projects by topic.
 
 <!-- material/tags -->

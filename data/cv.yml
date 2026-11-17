@@ -52,37 +52,37 @@ x_capabilities:
     text: >-
       Per-customer data separation, sharding, per-customer branding, languages and email
       templates.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
   - title: Embeddable web apps for partner sites
     text: >-
       Iframe security, sessions without third-party cookies, protection against being framed
       by other sites.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
   - title: APIs that stay correct under load
     text: >-
       API keys, rate limiting and lockout, safe retries (idempotency), protection against lost
       updates.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
   - title: Read replicas without losing fresh data
     text: >-
       Read-your-writes on databases with replicas, plus safe transactions across several
       databases.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
   - title: Deploys without Kubernetes
     text: >-
       Reproducible packages, deploys that switch versions without downtime, health checks,
       automatic rollback, systemd hardening.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
   - title: CI/CD and supply-chain security
     text: >-
       GitHub Actions, image scanning, SBOM and provenance, Dependabot, a test matrix across
       database engines.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
   - title: Maintainable codebases
     text: >-
       Layered architecture enforced by automated checks, fast tests without a database,
       decision records.
-    proof: projects/index.md
+    proof: projects/tenantlab.md
 
 # "Recently"
 x_recent:
