@@ -1,6 +1,7 @@
 """Integration: the whole site builds in strict mode, and the profile column is on every page."""
 
 import html
+import os
 import re
 import subprocess
 import sys
@@ -26,6 +27,9 @@ POSTS = {  # slug -> date folder (post_url_format "{date}/{slug}")
     "what-my-first-real-deploy-taught-my-tests": "2026/11/17",
 }
 ENV = {"NO_MKDOCS_2_WARNING": "1", "PATH": "/usr/bin:/bin"}
+if "PORTFOLIO_PDF" in os.environ:  # CI: required
+    ENV["PORTFOLIO_PDF"] = os.environ["PORTFOLIO_PDF"]
+PDF = "cv/NguyenHienLam-CV.pdf"
 
 
 @pytest.fixture(scope="module")
@@ -149,3 +153,12 @@ def test_private_repositories_are_never_linked(site: Path) -> None:
         if repo in p.read_text()
     ]
     assert leaks == []
+
+
+@pytest.mark.usefixtures("pdf_ready")
+def test_cv_pdf_is_published_and_linked(site: Path) -> None:
+    assert (site / PDF).read_bytes().startswith(b"%PDF-")
+    assert 'href="NguyenHienLam-CV.pdf"' in (site / "cv" / "index.html").read_text()
+    blog = (site / "blog" / "index.html").read_text()  # the profile column, any page
+    assert f'href="../{PDF}"' in blog
+    assert "CV (PDF)" in blog

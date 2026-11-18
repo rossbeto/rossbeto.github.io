@@ -1,6 +1,7 @@
 basics:
   name: Ada Example
   label: Backend Engineer
+  url: https://example.org/
   x_tagline: Builds things | carefully
   image: assets/img/avatar.svg
   x_image_alt: An avatar
@@ -8,15 +9,18 @@ basics:
   summary: [First paragraph., "Second paragraph with a [link](https://example.org)."]
   profiles:
     - { network: GitHub, url: "https://github.com/example", x_icon: fontawesome/brands/github }
+    - { network: Contact, url: "https://example.org/contact?x=1", x_icon: x, x_print: false }
 x_capabilities:
   - { title: Work skill, text: From a job. }
   - { title: Lab skill, text: From a lab., proof: projects/demo.md }
   - { title: Draft skill, text: Not yet., x_hidden: true }
+  - { title: Web only skill, text: Not on paper., x_print: false }
 x_recent:
   - { title: Learning, text: Something new. }
 skills:
   - { name: Languages, keywords: [Python, "C|D"], x_earlier: [Java] }
   - { name: Cloud, keywords: [AWS] }
+  - { name: Web only tools, keywords: [Nope], x_print: false }
 x_work_intro: Engineer since 2010.
 work:
   - name: Current Co

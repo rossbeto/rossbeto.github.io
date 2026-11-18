@@ -1,0 +1,107 @@
+<!doctype html>
+{#- The CV as a printable page, rendered to PDF by WeasyPrint (portfolio/pdf.py).
+    Same data as cv.md.j2 (data/cv.yml); entries with `x_print: false` stay on the web only.
+    Autoescape is on; free text goes through `md`, which escapes it and keeps [text](url) links. -#}
+{%- set b = cv.basics %}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ b.name }}</title>
+<meta name="author" content="{{ b.name }}">
+<meta name="description" content="{{ b.label }} · {{ b.location.city }}, {{ b.location.region }}">
+<meta name="keywords" content="{{ keywords | join(', ') }}">
+<style>
+{% include "cv_print.css" %}
+</style>
+</head>
+<body>
+<header>
+  <h1>{{ b.name }}</h1>
+  <p class="label">{{ b.label }} · {{ b.location.city }}, {{ b.location.region }}</p>
+  <p class="contact">
+    {%- for link in contact %}<a href="{{ link }}">{{ link | display_url }}</a>{{ " · " if not loop.last }}{% endfor -%}
+  </p>
+</header>
+
+<section class="summary">
+{%- for paragraph in b.summary %}
+  <p>{{ paragraph | md }}</p>
+{%- endfor %}
+</section>
+{%- if capabilities %}
+
+<section>
+  <h2>What I do</h2>
+  <ul class="capabilities">
+  {%- for c in capabilities %}
+    <li><strong>{{ c.title }}</strong>{% if c.proof %} <span class="lab">lab</span>{% endif %}: {{ c.text | md }}</li>
+  {%- endfor %}
+  </ul>
+  {%- if capabilities | selectattr("proof") | list %}
+  <p class="note"><span class="lab">lab</span> shown in a personal lab with code and tests (see Labs); the others come from paid work.</p>
+  {%- endif %}
+</section>
+{%- endif %}
+
+<section>
+  <h2>Experience</h2>
+  {%- for w in work %}
+  <article class="job">
+    <h3><span class="company">{{ w.name }}</span> · {{ w.position }}<span class="when">{{ w.period }} · {{ w.location }}</span></h3>
+    {%- if w.summary %}
+    <p>{{ w.summary | md }}</p>
+    {%- endif %}
+    <ul>
+    {%- for h in w.highlights %}
+      <li>{{ h | md }}</li>
+    {%- endfor %}
+    </ul>
+  </article>
+  {%- endfor %}
+</section>
+{%- if skills %}
+
+<section>
+  <h2>Skills</h2>
+  <dl class="skills">
+  {%- for s in skills %}
+    <div><dt>{{ s.name }}</dt><dd>{{ s.keywords | join(", ") }}{% if s.earlier %} <span class="earlier">(earlier: {{ s.earlier | join(", ") }})</span>{% endif %}</dd></div>
+  {%- endfor %}
+  </dl>
+</section>
+{%- endif %}
+{%- if recent %}
+
+<section>
+  <h2>Recently</h2>
+  <ul class="capabilities">
+  {%- for n in recent %}
+    <li><strong>{{ n.title }}</strong>: {{ n.text | md }}</li>
+  {%- endfor %}
+  </ul>
+</section>
+{%- endif %}
+{%- if labs %}
+
+<section>
+  <h2>Labs</h2>
+  <ul class="labs">
+  {%- for lab in labs %}
+    <li><strong>{{ lab.title }}</strong>: {{ lab.summary }}{% if lab.url %} <a href="{{ lab.url }}">{{ lab.url | display_url }}</a>{% endif %}</li>
+  {%- endfor %}
+  </ul>
+</section>
+{%- endif %}
+{%- if cv.education %}
+
+<section>
+  <h2>Education</h2>
+  <ul class="education">
+  {%- for e in cv.education %}
+    <li>{{ e.institution }}{% if e.studyType or e.area %}: {{ [e.studyType, e.area] | select | join(", ") }}{% endif %}</li>
+  {%- endfor %}
+  </ul>
+</section>
+{%- endif %}
+</body>
+</html>

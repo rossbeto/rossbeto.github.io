@@ -11,6 +11,7 @@ dependencies = [
     "mkdocs-material==9.8.1",
     "pydantic>=2.14",
     "pyyaml>=6.0",
+    "weasyprint>=66",
 ]
 
 [project.scripts]
@@ -25,6 +26,7 @@ dev = [
     "codespell>=2.4",
     "import-linter>=2.5",
     "mypy>=1.18",
+    "pypdfium2>=5.15.2",
     "pytest>=9",
     "pytest-cov>=7",
     "ruff>=0.14",
@@ -51,6 +53,10 @@ allowed-confusables = ["–"]  # date ranges: "Sep 2019 – Present"
 [tool.mypy]
 strict = true
 files = ["src", "scripts/forbidden_terms.py", "scripts/check_links.py"]
+
+[[tool.mypy.overrides]]
+module = ["weasyprint", "weasyprint.*"]
+ignore_missing_imports = true
 
 [tool.codespell]
 skip = "./site,./.venv,./uv.lock,*.svg,*.sha256"
@@ -79,9 +85,24 @@ forbidden_modules = [
     "portfolio.blog.frontmatter",
     "portfolio.cv.load",
     "portfolio.projects.frontmatter",
+    "portfolio.pdf",
     "portfolio.build",
     "portfolio.cli",
 ]
+
+[[tool.importlinter.contracts]]
+name = "only the PDF adapter imports WeasyPrint"
+type = "forbidden"
+source_modules = [
+    "portfolio.cli",
+    "portfolio.build",
+    "portfolio.frontmatter",
+    "portfolio.blog.frontmatter",
+    "portfolio.cv.load",
+    "portfolio.projects.frontmatter",
+]
+forbidden_modules = ["weasyprint"]
+allow_indirect_imports = true      # through portfolio.pdf is the point
 
 [[tool.importlinter.contracts]]
 name = "the generator is independent of the site builder"
@@ -95,7 +116,7 @@ type = "layers"
 layers = [
     "portfolio.cli",
     "portfolio.build",
-    "portfolio.blog.frontmatter | portfolio.cv.load | portfolio.projects.frontmatter",
+    "portfolio.blog.frontmatter | portfolio.cv.load | portfolio.projects.frontmatter | portfolio.pdf",
     "portfolio.frontmatter",
     "portfolio.blog.latest | portfolio.cv.render | portfolio.projects.index",
     "portfolio.blog.model | portfolio.cv.model | portfolio.projects.model",

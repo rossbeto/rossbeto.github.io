@@ -11,3 +11,4 @@ generated/
 docs/cv/index.md
 overrides/partials/profile_data.html
 docs/projects/index.md
+docs/cv/*.pdf

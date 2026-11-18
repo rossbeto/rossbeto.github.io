@@ -43,12 +43,14 @@ class Profile(Entry):
     url: NonEmpty
     username: str | None = None
     icon: Annotated[str, Field(alias="x_icon")]
+    in_print: Annotated[bool, Field(alias="x_print")] = True  # false: web page only, not the PDF
 
 
 class Basics(Entry):
     name: NonEmpty
     label: NonEmpty
     tagline: Annotated[str | None, Field(alias="x_tagline")] = None
+    url: str | None = None  # the site; printed in the PDF header and before lab links
     image: NonEmpty
     image_alt: Annotated[str, Field(alias="x_image_alt", min_length=1)]
     location: Location
@@ -69,17 +71,20 @@ class Capability(Entry):
     # and gets a "lab" badge linking there (lab work is always labelled as lab work).
     proof: Annotated[str | None, AfterValidator(lambda v: v and _docs_page(v))] = None
     hidden: Annotated[bool, Field(alias="x_hidden")] = False
+    in_print: Annotated[bool, Field(alias="x_print")] = True  # false: web page only, not the PDF
 
 
 class Note(Entry):
     title: NonEmpty
     text: NonEmpty
+    in_print: Annotated[bool, Field(alias="x_print")] = True  # false: web page only, not the PDF
 
 
 class SkillGroup(Entry):
     name: NonEmpty
     keywords: Annotated[list[NonEmpty], Field(min_length=1)]
     earlier: Annotated[list[NonEmpty], Field(alias="x_earlier")] = []
+    in_print: Annotated[bool, Field(alias="x_print")] = True  # false: web page only, not the PDF
 
 
 class Work(Entry):
@@ -91,6 +96,7 @@ class Work(Entry):
     summary: str | None = None
     highlights: Annotated[list[NonEmpty], Field(min_length=1)]
     hidden: Annotated[bool, Field(alias="x_hidden")] = False
+    in_print: Annotated[bool, Field(alias="x_print")] = True  # false: web page only, not the PDF
 
     @model_validator(mode="after")
     def _ends_after_start(self) -> Self:

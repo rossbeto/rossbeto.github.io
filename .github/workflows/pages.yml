@@ -18,6 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    env:
+      PORTFOLIO_PDF: required      # no CV PDF is a failed build here (a laptop may skip it)
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -25,6 +27,11 @@ jobs:
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
+      - name: WeasyPrint's system libraries (the CV PDF)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends \
+            libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
       - run: uv sync --frozen
       - run: make check            # includes the strict build into site/
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0

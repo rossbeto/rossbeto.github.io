@@ -14,5 +14,12 @@
         </a>
       </li>
     {% endfor %}
+    {% if profile.pdf is defined %}
+      <li>
+        <a href="{{ profile.pdf | url }}">
+          <span class="profile__icon">{% include ".icons/material/file-pdf-box.svg" %}</span>CV (PDF)
+        </a>
+      </li>
+    {% endif %}
   </ul>
 </div>

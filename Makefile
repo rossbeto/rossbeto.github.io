@@ -4,8 +4,10 @@ UV := uv
 export NO_MKDOCS_2_WARNING := 1
 PORT ?= 8001
 MATERIAL_IMAGE := squidfunk/mkdocs-material:9.8.1
+PYTHON_IMAGE := python:3.13-slim-trixie
+PDF_LIBS := libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
 
-.PHONY: help sync generate serve build test lint links terms check docker-serve clean
+.PHONY: help sync generate pdf docker-pdf serve build test lint links terms check docker-serve clean
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/ —/'
@@ -13,8 +15,18 @@ help:            ## list targets
 sync:            ## install from uv.lock
 	$(UV) sync --frozen
 
-generate:        ## write generated/ (latest posts) from the content
+generate:        ## write the generated pages, snippets and the CV PDF (skipped with a warning without Pango)
 	$(UV) run portfolio generate
+
+pdf:             ## like generate, but a missing CV PDF is an error (as in CI)
+	PORTFOLIO_PDF=required $(UV) run portfolio generate
+
+docker-pdf:      ## `make pdf` in a container, for a host without Pango (installs nothing on the host)
+	docker run --rm -v $(CURDIR):/src -w /src -e PORTFOLIO_PDF=required \
+	  -e UV_PROJECT_ENVIRONMENT=/tmp/venv $(PYTHON_IMAGE) sh -ec '\
+	    apt-get update -q && apt-get install -y -q --no-install-recommends $(PDF_LIBS) >/dev/null; \
+	    pip install -q uv==0.11.3; uv sync --frozen -q; uv run portfolio generate; \
+	    chown -R $(shell id -u):$(shell id -g) docs/cv docs/projects generated overrides/partials'
 
 serve: generate  ## live preview on http://127.0.0.1:$(PORT) (re-run `make generate` after editing post front matter)
 	$(UV) run mkdocs serve -a 127.0.0.1:$(PORT)

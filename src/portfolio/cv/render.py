@@ -4,8 +4,11 @@ import html
 import json
 import posixpath
 import re
+from collections.abc import Sequence
+from typing import NamedTuple
 
 from jinja2 import Environment, PackageLoader, StrictUndefined
+from markupsafe import Markup, escape
 
 from portfolio.cv.model import CV
 
@@ -41,10 +44,14 @@ def render_cv_markdown(cv: CV, *, pdf_url: str | None = None) -> str:
     return re.sub(r"\n{3,}", "\n\n", text)  # the template's optional sections leave gaps
 
 
-def profile_context(cv: CV) -> dict[str, object]:
-    """What overrides/partials/profile.html shows in the left column."""
+def profile_context(cv: CV, *, pdf_path: str | None = None) -> dict[str, object]:
+    """What overrides/partials/profile.html shows in the left column.
+
+    `pdf_path` (under docs/, e.g. `cv/X-CV.pdf`) adds the "CV (PDF)" link; it is only passed
+    when the PDF was generated in the same run.
+    """
     b = cv.basics
-    return {
+    context: dict[str, object] = {
         "name": b.name,
         "label": b.label,
         "location": f"{b.location.city}, {b.location.region}",
@@ -52,15 +59,18 @@ def profile_context(cv: CV) -> dict[str, object]:
         "image_alt": b.image_alt,
         "links": [{"name": p.network, "url": p.url, "icon": p.icon} for p in b.profiles],
     }
+    if pdf_path:
+        context["pdf"] = pdf_path
+    return context
 
 
-def render_profile_data(cv: CV) -> str:
+def render_profile_data(cv: CV, *, pdf_path: str | None = None) -> str:
     """A Jinja file for the theme: `{% set profile = {...} %}`, imported by profile.html.
 
     JSON literals of strings, lists and objects are valid Jinja literals; `json.dumps` escapes
     quotes and backslashes, and the model holds no booleans or numbers here.
     """
-    data = json.dumps(profile_context(cv), ensure_ascii=False, indent=2)
+    data = json.dumps(profile_context(cv, pdf_path=pdf_path), ensure_ascii=False, indent=2)
     if "{{" in data or "{%" in data or "{#" in data:
         raise ValueError("profile values must not contain Jinja delimiters")
     return (
@@ -78,4 +88,53 @@ def render_home_header(cv: CV) -> str:
         f"![{b.image_alt}]({b.image})\n"
         f"<p><strong>{name}</strong><br>{label} · {city}</p>\n"
         "</div>\n"
+    )
+
+
+class PrintLab(NamedTuple):
+    """One line in the PDF's Labs section (from a project page with `kind: lab`)."""
+
+    title: str
+    summary: str
+    url: str | None
+
+
+def display_url(url: str) -> str:
+    """A link as people read it on paper: `https://www.x.org/a/` → `x.org/a`."""
+    return re.sub(r"^https?://(www\.)?", "", url).rstrip("/")
+
+
+_MD_LINK = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
+
+
+def md_links(text: str) -> Markup:
+    """Escape free text for HTML, turning `[text](https://…)` (allowed in cv.yml) into links."""
+    escaped = str(escape(text))
+    return Markup(_MD_LINK.sub(r'<a href="\2">\1</a>', escaped))  # noqa: S704  (escaped above)
+
+
+_print_env = Environment(
+    loader=PackageLoader("portfolio", "templates"),
+    undefined=StrictUndefined,
+    autoescape=True,
+    keep_trailing_newline=True,
+)
+_print_env.filters["display_url"] = display_url
+_print_env.filters["md"] = md_links
+
+
+def render_cv_print_html(cv: CV, *, labs: Sequence[PrintLab] = ()) -> str:
+    """The printable CV (HTML for WeasyPrint). Links are printed as text: people print CVs."""
+    b = cv.basics
+    skills = [s for s in cv.skills if s.in_print]
+    contact = ([b.url] if b.url else []) + [p.url for p in b.profiles if p.in_print]
+    return _print_env.get_template("cv_print.html.j2").render(
+        cv=cv,
+        contact=contact,
+        capabilities=[c for c in cv.capabilities if not c.hidden and c.in_print],
+        recent=[n for n in cv.recent if n.in_print],
+        skills=skills,
+        work=[w for w in cv.work if not w.hidden and w.in_print],
+        labs=labs,
+        keywords=[k for s in skills for k in s.keywords],
     )

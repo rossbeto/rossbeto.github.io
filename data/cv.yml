@@ -2,12 +2,14 @@
 # Phase 005). JSON Resume shape (https://jsonresume.org/schema) plus `x_` extensions.
 # `portfolio generate` validates it (src/portfolio/cv/model.py): unknown keys, bad dates and
 # `[...]` gaps that are not Markdown links stop the build with the field path.
+# `x_print: false` on an entry keeps it on the web page but out of the PDF.
 # Public site: no email, no phone (D-12); no internal product or code names.
 
 basics:
   name: Nguyen Hien Lam
   label: Senior Software Engineer
   x_tagline: Senior software builder, production support
+  url: https://rossbeto.github.io/
   image: assets/img/avatar.svg
   x_image_alt: Monogram avatar of a coder with glasses
   location:
@@ -36,6 +38,7 @@ basics:
     - network: Contact (GitHub issue)
       url: https://github.com/rossbeto/rossbeto.github.io/issues/new?template=contact.yml
       x_icon: material/message-text-outline
+      x_print: false  # too long on paper; the site URL in the PDF header leads to it
 
 # "What I do". `proof` (a page under docs/) marks a capability shown in a personal lab: it gets
 # a "lab" badge linking there. Entries without `proof` come from paid work.

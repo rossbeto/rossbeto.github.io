@@ -14,7 +14,7 @@ First paragraph.
 
 Second paragraph with a [link](https://example.org).
 
-[GitHub](https://github.com/example){ .md-button }
+[GitHub](https://github.com/example){ .md-button } [Contact](https://example.org/contact?x=1){ .md-button }
 
 ## What I do
 
@@ -23,6 +23,7 @@ paid work.
 
 - **Work skill**: From a job.
 - **Lab skill** [lab](../projects/demo.md){ .cv-lab title="Shown in a personal lab" }: From a lab.
+- **Web only skill**: Not on paper.
 
 ## Recently
 
@@ -34,6 +35,7 @@ paid work.
 |---|---|---|
 | Languages | Python, C\|D | Java |
 | Cloud | AWS |  |
+| Web only tools | Nope |  |
 
 ## Experience
 

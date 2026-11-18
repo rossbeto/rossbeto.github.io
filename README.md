@@ -13,15 +13,20 @@ make check      # lint, import contracts, tests, strict build, link check, forbi
 ```
 No Python on the machine? `make docker-serve` runs the same preview in a container.
 
+The CV PDF needs WeasyPrint's system libraries (Pango; `apt install libpango-1.0-0
+libpangoft2-1.0-0 libharfbuzz-subset0`). Without them `make generate` skips the PDF with a
+warning and the site simply has no "Download PDF" link; `make docker-pdf` makes it in a container
+instead. CI sets `PORTFOLIO_PDF=required`, so a deploy always has it.
+
 ## Layout
 
 | Path | What |
 |---|---|
-| `data/cv.yml` | **the CV**: one source for the CV page, the profile column and the home header (JSON Resume shape) |
-| `docs/` | the pages (Markdown) and assets; `docs/cv/index.md` is generated |
+| `data/cv.yml` | **the CV**: one source for the CV page, the PDF, the profile column and the home header (JSON Resume shape) |
+| `docs/` | the pages (Markdown) and assets; `docs/cv/index.md` and `docs/cv/*.pdf` are generated |
 | `docs/projects/` | one page per project (front matter feeds the generated index and home cards) |
 | `docs/blog/posts/` | blog posts (Material blog plugin); how to write one: `docs/blog/README.md` |
-| `src/portfolio/` | `portfolio generate`: validates `data/cv.yml` and post front matter, writes the generated files (gitignored) |
+| `src/portfolio/` | `portfolio generate`: validates `data/cv.yml` and post front matter, writes the generated files and the CV PDF (gitignored); print layout in `templates/cv_print.*` |
 | `generated/` | generated Markdown pulled into pages with `pymdownx.snippets` (home: latest posts) |
 | `overrides/` | Material theme overrides: the profile column on the left of every page |
 | `mkdocs.yml` | site configuration, navigation, the profile values |
@@ -34,6 +39,9 @@ Edit `data/cv.yml`, then `make generate` (or `make serve`, which runs it once at
 `make generate` while it is running). Validation names the field: `work[0].highlights[1]:
 placeholder '[X]'`. Capabilities shown only in a personal lab carry `proof: projects/<page>.md`
 and get a **lab** badge. No email or phone: the site never publishes them.
+
+The same run writes `docs/cv/NguyenHienLam-CV.pdf` (A4). Over 3 pages fails the build. To keep
+the PDF short, `x_print: false` on an entry keeps it on the web page only.
 
 ## Add a project
 
