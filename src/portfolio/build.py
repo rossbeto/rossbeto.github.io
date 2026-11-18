@@ -1,5 +1,6 @@
 """Use cases: orchestrate the adapters and the pure renderers, return text. No writing."""
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
@@ -17,9 +18,10 @@ from portfolio.cv.render import (
     render_profile_data,
 )
 from portfolio.pdf import PDFUnavailable, render_pdf
+from portfolio.projects.card import parse_card, render_synced_page
 from portfolio.projects.frontmatter import read_projects
 from portfolio.projects.index import render_featured, render_project_index
-from portfolio.projects.model import Kind, Project
+from portfolio.projects.model import Kind, Project, ProjectSource
 
 MAX_PDF_PAGES = 3  # a CV that grew longer is a bug, not a layout detail
 
@@ -107,3 +109,39 @@ class ProjectOutputs:
 def build_projects(docs_dir: Path) -> ProjectOutputs:
     projects = read_projects(docs_dir)
     return ProjectOutputs(index=render_project_index(projects), featured=render_featured(projects))
+
+
+# Project sync (Phase 006). `fetch(repo, ref, path) -> bytes` is the GitHub adapter in
+# production and a dict lookup in tests.
+Fetch = Callable[[str, str, str], bytes]
+
+
+@dataclass(frozen=True)
+class SyncedFile:
+    path: str  # relative to docs/
+    data: bytes
+
+
+def build_synced_projects(sources: list[ProjectSource], fetch: Fetch) -> list[SyncedFile]:
+    """Every file the pinned sources produce: the page, then its media."""
+    files = []
+    for source in sources:
+        card = parse_card(
+            fetch(source.repo, source.ref, source.card).decode("utf-8"),
+            f"{source.repo}/{source.card}",
+        )
+        page = render_synced_page(card, source)
+        files.append(SyncedFile(source.page, page.encode("utf-8")))
+        files += [
+            SyncedFile(source.asset(m), fetch(source.repo, source.ref, m)) for m in source.media
+        ]
+    return files
+
+
+def drift(files: list[SyncedFile], docs_dir: Path) -> list[str]:
+    """Files on disk that differ from what the pinned sources produce."""
+    return [
+        f.path
+        for f in files
+        if not (docs_dir / f.path).is_file() or (docs_dir / f.path).read_bytes() != f.data
+    ]

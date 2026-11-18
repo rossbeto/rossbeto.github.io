@@ -1,4 +1,5 @@
-"""Composition root: `portfolio generate`. Paths and file writes only; no logic.
+"""Composition root: `portfolio generate` and `portfolio sync-projects`. Paths and file writes
+only; no logic.
 
 Outputs (all gitignored): `docs/cv/index.md` and `docs/projects/index.md` (pages),
 `docs/cv/<Name>-CV.pdf` (copied into the site by the build, so its links are checked),
@@ -13,9 +14,20 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from portfolio.build import PDFError, PdfMode, build_cv, build_latest_posts, build_projects
+from portfolio.build import (
+    PDFError,
+    PdfMode,
+    build_cv,
+    build_latest_posts,
+    build_projects,
+    build_synced_projects,
+    drift,
+)
 from portfolio.cv.load import CVError
 from portfolio.frontmatter import FrontMatterError
+from portfolio.github import FetchError, fetch_raw, latest_commit
+from portfolio.projects.card import CardError
+from portfolio.projects.sources import SourceError, bump_ref, load_sources
 
 
 def _write(path: Path, text: str) -> None:
@@ -47,6 +59,39 @@ def generate(root: Path, *, pdf: PdfMode = PdfMode.AUTO) -> None:
     _write(root / "generated" / "featured-projects.md", projects.featured)
 
 
+def sync_projects(root: Path, *, check: bool = False, bump: bool = False) -> int:
+    """Pages and media from the repos in data/projects.yml, at their pinned commits.
+
+    `--bump` first moves each `ref` to the repo's latest commit (the update workflow);
+    `--check` writes nothing and returns 1 when the committed files differ (CI drift check).
+    """
+    sources_file = root / "data" / "projects.yml"
+    sources = load_sources(sources_file)
+    if bump:
+        for source in sources:
+            latest = latest_commit(source.repo)
+            if latest != source.ref:
+                bump_ref(sources_file, source.ref, latest)
+                print(f"{source.slug}: {source.ref[:12]} -> {latest[:12]}")
+        sources = load_sources(sources_file)
+    files = build_synced_projects(sources, fetch_raw)
+    docs = root / "docs"
+    if check:
+        stale = drift(files, docs)
+        for path in stale:
+            print(f"drift: docs/{path} differs from its pinned source", file=sys.stderr)
+        if stale:
+            print("run `make projects-sync` and commit the result", file=sys.stderr)
+        return 1 if stale else 0
+    for f in files:
+        (docs / f.path).parent.mkdir(parents=True, exist_ok=True)
+        (docs / f.path).write_bytes(f.data)
+        print(f"wrote docs/{f.path}")
+    if not sources:
+        print("no sources in data/projects.yml: nothing to sync")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="portfolio", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -60,10 +105,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="the CV PDF: auto (skip if WeasyPrint can't run), required (CI), off. "
         "Default: $PORTFOLIO_PDF or auto",
     )
+    sync = sub.add_parser("sync-projects", help="project pages from their repos' portfolio cards")
+    sync.add_argument("--root", type=Path, default=Path.cwd(), help="project root (mkdocs.yml)")
+    mode = sync.add_mutually_exclusive_group()
+    mode.add_argument("--check", action="store_true", help="exit 1 if the files have drifted")
+    mode.add_argument("--bump", action="store_true", help="move each ref to the latest commit")
     args = parser.parse_args(argv)
     try:
+        if args.command == "sync-projects":
+            return sync_projects(args.root, check=args.check, bump=args.bump)
         generate(args.root, pdf=PdfMode(args.pdf))
-    except (CVError, FrontMatterError, PDFError) as exc:
+    except (CVError, FrontMatterError, PDFError, SourceError, CardError, FetchError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0

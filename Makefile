@@ -7,7 +7,7 @@ MATERIAL_IMAGE := squidfunk/mkdocs-material:9.8.1
 PYTHON_IMAGE := python:3.13-slim-trixie
 PDF_LIBS := libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
 
-.PHONY: help sync generate pdf docker-pdf serve build test lint links terms check docker-serve clean
+.PHONY: help sync generate pdf docker-pdf projects-sync projects-check serve build test lint links terms check docker-serve clean
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/ —/'
@@ -27,6 +27,12 @@ docker-pdf:      ## `make pdf` in a container, for a host without Pango (install
 	    apt-get update -q && apt-get install -y -q --no-install-recommends $(PDF_LIBS) >/dev/null; \
 	    pip install -q uv==0.11.3; uv sync --frozen -q; uv run portfolio generate; \
 	    chown -R $(shell id -u):$(shell id -g) docs/cv docs/projects generated overrides/partials'
+
+projects-sync:   ## project pages from their repos' portfolio cards, at the refs in data/projects.yml (network)
+	$(UV) run portfolio sync-projects
+
+projects-check:  ## fail if synced project pages differ from their pinned cards (network; CI runs it)
+	$(UV) run portfolio sync-projects --check
 
 serve: generate  ## live preview on http://127.0.0.1:$(PORT) (re-run `make generate` after editing post front matter)
 	$(UV) run mkdocs serve -a 127.0.0.1:$(PORT)

@@ -1,0 +1,24 @@
+# Portfolio card: <slug>
+
+<!-- The single source the github.io portfolio site ingests (docs/portfolio-card.md in the
+     project repo). Keep the headings stable: the sync fails on a missing or unknown section. -->
+
+## Title
+short-name: what it is in a few words (≤ 60 characters)
+
+## Pitch
+One paragraph: what it is, who it is for, and the hard parts it covers.
+
+## Media
+- ![What the GIF shows](media/demo.gif)
+- Other material: [architecture.md](architecture.md)
+
+## Highlights
+- **Claim:** how it is proven (name the test).
+
+## Tech stack
+Python · ...
+
+## Links
+- Repository: https://github.com/rossbeto/<repo>
+- README: [../README.md](../README.md)

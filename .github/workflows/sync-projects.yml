@@ -1,0 +1,60 @@
+name: sync-projects
+
+# Moves each project in data/projects.yml to its repo's latest commit, re-syncs the page from
+# the repo's docs/portfolio-card.md and opens (or updates) one pull request. Nothing reaches the
+# site until that PR is reviewed and merged. Public repos only: no extra secrets.
+#
+# A PR opened with GITHUB_TOKEN does not trigger other workflows (ci.yml), so the same checks run
+# here before the PR is opened. Needs: Settings > Actions > General > "Allow GitHub Actions to
+# create and approve pull requests".
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"         # Mondays 03:17 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-projects
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write              # push the sync branch
+      pull-requests: write         # open the PR
+    env:
+      PORTFOLIO_PDF: required
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0           # the forbidden-terms check reads commit messages
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: true
+      - name: WeasyPrint's system libraries (the CV PDF)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends \
+            libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
+      - run: uv sync --frozen
+      - name: Bump refs and sync
+        run: uv run portfolio sync-projects --bump
+      - run: make check            # the synced pages build, links resolve, terms are clean
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: chore/projects-sync
+          delete-branch: true
+          commit-message: "chore(projects): sync project pages from their repos"
+          title: "chore(projects): sync project pages from their repos"
+          body: |
+            `portfolio sync-projects --bump` moved the refs in `data/projects.yml` to each repo's
+            latest commit and regenerated the pages and media. Review the diff of the pages; the
+            text comes from each repo's `docs/portfolio-card.md`.
+          add-paths: |
+            data/projects.yml
+            docs/projects
+            docs/assets/projects

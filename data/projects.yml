@@ -1,0 +1,28 @@
+# Project pages synced from each project's own repository (Phase 006, decision D-14).
+# `make projects-sync` turns the repo's `docs/portfolio-card.md` at `ref` into
+# `docs/projects/<slug>.md` and copies `media` to `docs/assets/projects/<slug>/`.
+# The card contract (sections, links): README.md, "Sync a project from its repo".
+#
+# Public repositories only (no token). `ref` is a full commit SHA: the page changes only when the
+# ref changes, through a reviewed pull request (.github/workflows/sync-projects.yml bumps it).
+# A synced page overwrites a hand-written page with the same slug.
+#
+# tenantlab is not listed yet: its repository is still private, and its hand-written case study
+# (docs/projects/tenantlab.md) has more than the card. When the repo is public, either move the
+# extra sections into the card and add the entry below, or keep the page hand-written.
+
+sources: []
+#  - slug: tenantlab
+#    repo: rossbeto/prj_django_tenant_lab
+#    ref: <full 40-character commit SHA>
+#    card: docs/portfolio-card.md
+#    media: [docs/media/demo.gif, docs/media/tlb.gif]
+#    meta:                        # site-only fields the card does not carry
+#      summary: One Django codebase serving several partner companies, each on its own shard.
+#      stage: active
+#      kind: lab
+#      image: assets/projects/tenantlab/poster.png
+#      image_alt: The tenant portal signed in inside a partner's website, in an iframe
+#      tags: [django, multi-tenancy, mysql, security, concurrency, deploy, ci]
+#      featured: true
+#      order: 1

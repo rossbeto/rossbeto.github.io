@@ -24,7 +24,8 @@ instead. CI sets `PORTFOLIO_PDF=required`, so a deploy always has it.
 |---|---|
 | `data/cv.yml` | **the CV**: one source for the CV page, the PDF, the profile column and the home header (JSON Resume shape) |
 | `docs/` | the pages (Markdown) and assets; `docs/cv/index.md` and `docs/cv/*.pdf` are generated |
-| `docs/projects/` | one page per project (front matter feeds the generated index and home cards) |
+| `docs/projects/` | one page per project (front matter feeds the generated index and home cards); hand-written, or synced from the project's repo |
+| `data/projects.yml` | projects synced from their own repos' portfolio cards, pinned to a commit |
 | `docs/blog/posts/` | blog posts (Material blog plugin); how to write one: `docs/blog/README.md` |
 | `src/portfolio/` | `portfolio generate`: validates `data/cv.yml` and post front matter, writes the generated files and the CV PDF (gitignored); print layout in `templates/cv_print.*` |
 | `generated/` | generated Markdown pulled into pages with `pymdownx.snippets` (home: latest posts) |
@@ -54,6 +55,23 @@ the PDF short, `x_print: false` on an entry keeps it on the web page only.
    forget), then `make check`.
 
 `featured: true` puts the card on the home page (up to 3).
+
+## Sync a project from its repo
+
+A **public** project can keep its write-up next to its code, in `docs/portfolio-card.md`
+(template: `docs/projects/_card_template.md.example`). The card has exactly these `##`
+sections: **Title, Pitch, Media, Highlights, Tech stack, Links**; a missing, empty, repeated or
+unknown section stops the sync and names it.
+
+1. Add the repo to `data/projects.yml` with `ref` (a full commit SHA), the `media` files to copy
+   and the site-only `meta` (summary, stage, kind, tags, poster image).
+2. `make projects-sync` writes `docs/projects/<slug>.md` and `docs/assets/projects/<slug>/…`:
+   links into the repo point at the file on GitHub **at that commit**; images must be listed in
+   `media` (no hotlinking). Add the nav line, `make check`, commit.
+3. Later updates: the `sync-projects` workflow (manual or weekly) bumps the refs and opens a pull
+   request. CI runs `make projects-check`, which fails if a synced page was edited by hand.
+
+Private repos are never synced (no token); their pages stay hand-written with `repo_public: false`.
 
 ## Add a post
 

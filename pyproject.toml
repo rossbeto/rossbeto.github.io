@@ -77,6 +77,7 @@ source_modules = [
     "portfolio.cv.render",
     "portfolio.projects.model",
     "portfolio.projects.index",
+    "portfolio.projects.card",
 ]
 forbidden_modules = [
     "yaml",
@@ -86,6 +87,8 @@ forbidden_modules = [
     "portfolio.cv.load",
     "portfolio.projects.frontmatter",
     "portfolio.pdf",
+    "portfolio.github",
+    "portfolio.projects.sources",
     "portfolio.build",
     "portfolio.cli",
 ]
@@ -116,9 +119,9 @@ type = "layers"
 layers = [
     "portfolio.cli",
     "portfolio.build",
-    "portfolio.blog.frontmatter | portfolio.cv.load | portfolio.projects.frontmatter | portfolio.pdf",
+    "portfolio.blog.frontmatter | portfolio.cv.load | portfolio.projects.frontmatter | portfolio.projects.sources | portfolio.pdf | portfolio.github",
     "portfolio.frontmatter",
-    "portfolio.blog.latest | portfolio.cv.render | portfolio.projects.index",
+    "portfolio.blog.latest | portfolio.cv.render | portfolio.projects.index | portfolio.projects.card",
     "portfolio.blog.model | portfolio.cv.model | portfolio.projects.model",
     "portfolio.model",
 ]
