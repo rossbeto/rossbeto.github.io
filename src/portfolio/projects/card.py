@@ -115,6 +115,7 @@ def render_synced_page(card: Card, source: ProjectSource) -> str:
     fields: dict[str, object] = {
         "title": card.title,
         "summary": m.summary,
+        "description": m.summary,
         "stage": m.stage.value,
         "kind": m.kind.value,
         "repo": f"https://github.com/{source.repo}",

@@ -162,3 +162,67 @@ def test_cv_pdf_is_published_and_linked(site: Path) -> None:
     blog = (site / "blog" / "index.html").read_text()  # the profile column, any page
     assert f'href="../{PDF}"' in blog
     assert "CV (PDF)" in blog
+
+
+def test_every_page_has_share_tags_and_a_description(site: Path) -> None:
+    missing = []
+    for page in _pages(site):
+        text = page.read_text()
+        for tag in ('name="description"', 'property="og:title"', 'property="og:image"'):
+            if tag not in text:
+                missing.append(f"{page.relative_to(site)}: {tag}")
+    assert missing == []
+    image = re.search(r'property="og:image" content="([^"]+)"', (site / "index.html").read_text())
+    assert image and image[1] == "https://rossbeto.github.io/assets/img/social-card.png"
+    assert (site / "assets" / "img" / "social-card.png").is_file()
+
+
+@pytest.mark.parametrize(
+    "page",
+    ["cv/index.html", "projects/index.html", "projects/tenantlab/index.html", "blog/index.html"]
+    + [f"blog/{d}/{s}/index.html" for s, d in POSTS.items()],
+)
+def test_key_pages_have_their_own_description(site: Path, page: str) -> None:
+    site_description = yaml.safe_load((ROOT / "mkdocs.yml").read_text().split("\ntheme:")[0])[
+        "site_description"
+    ]
+    found = re.search(r'<meta name="description" content="([^"]*)"', (site / page).read_text())
+    assert found and html.unescape(found[1]) != site_description
+
+
+def test_sitemap_and_robots(site: Path) -> None:
+    assert "https://rossbeto.github.io/cv/" in (site / "sitemap.xml").read_text()
+    assert "Sitemap: https://rossbeto.github.io/sitemap.xml" in (site / "robots.txt").read_text()
+
+
+def test_no_third_party_requests_for_fonts(site: Path) -> None:
+    hits = [
+        str(p.relative_to(site))
+        for p in _pages(site)
+        if "fonts.googleapis.com" in p.read_text() or "fonts.gstatic.com" in p.read_text()
+    ]
+    assert hits == []
+
+
+def test_demo_videos_resolve(site: Path) -> None:
+    page = site / "projects" / "tenantlab" / "index.html"
+    sources = re.findall(r'(?:src|poster)="(\.\./\.\./assets/[^"]+)"', page.read_text())
+    assert len(sources) >= 3
+    missing = [s for s in sources if not (page.parent / s).resolve().is_file()]
+    assert missing == []
+
+
+@pytest.mark.usefixtures("pdf_ready")
+def test_pdf_and_web_cv_list_the_same_jobs(site: Path) -> None:
+    import pypdfium2 as pdfium  # noqa: PLC0415  (dev dependency; only with the PDF)
+
+    pdf = pdfium.PdfDocument((site / PDF).read_bytes())
+    text = " ".join(" ".join(p.get_textpage().get_text_range().split()) for p in pdf)
+    web = html.unescape((site / "cv" / "index.html").read_text())
+    data = yaml.safe_load((ROOT / "data" / "cv.yml").read_text())
+    for job in data["work"]:
+        if job.get("x_hidden") or job.get("x_print") is False:
+            continue
+        for value in (job["name"], job["position"]):
+            assert value in text, f"PDF lacks {value!r}"
+            assert value in web, f"web CV lacks {value!r}"

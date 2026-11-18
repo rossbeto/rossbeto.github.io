@@ -37,6 +37,8 @@ class ProjectMeta(BaseModel):
 
     title: Annotated[Text, Field(min_length=1, max_length=60)]
     summary: Annotated[Text, Field(min_length=1, max_length=160)]
+    # Search results and share previews; Material's own key. Defaults to the site description.
+    description: Annotated[Text | None, Field(max_length=160)] = None
     stage: Stage
     kind: Kind
     repo: Annotated[str, Field(pattern=r"^https://github\.com/[\w.-]+/[\w.-]+$")]

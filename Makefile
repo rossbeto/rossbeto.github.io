@@ -5,9 +5,10 @@ export NO_MKDOCS_2_WARNING := 1
 PORT ?= 8001
 MATERIAL_IMAGE := squidfunk/mkdocs-material:9.8.1
 PYTHON_IMAGE := python:3.13-slim-trixie
+PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright/python:v1.64.1-noble
 PDF_LIBS := libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
 
-.PHONY: help sync generate pdf docker-pdf projects-sync projects-check serve build test lint links terms check docker-serve clean
+.PHONY: help sync generate pdf docker-pdf projects-sync projects-check social-images a11y zensical serve build test lint links terms check docker-serve clean
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/ —/'
@@ -33,6 +34,23 @@ projects-sync:   ## project pages from their repos' portfolio cards, at the refs
 
 projects-check:  ## fail if synced project pages differ from their pinned cards (network; CI runs it)
 	$(UV) run portfolio sync-projects --check
+
+social-images:   ## re-render the share-preview card and touch icon from data/cv.yml (Docker), then commit them
+	$(UV) run python scripts/social_images.py html
+	docker run --rm --user $(shell id -u):$(shell id -g) -e HOME=/tmp -v $(CURDIR):/src -w /src \
+	  $(PLAYWRIGHT_IMAGE) sh -ec 'pip install -q --user --break-system-packages playwright==1.64.1 \
+	    && python3 scripts/social_images.py shoot'
+
+a11y: build      ## axe-core accessibility check of the built site, light and dark (Docker)
+	@mkdir -p .cache
+	@test -s .cache/axe.min.js || curl -fsSL -o .cache/axe.min.js https://cdn.jsdelivr.net/npm/axe-core@4.10.3/axe.min.js
+	docker run --rm --user $(shell id -u):$(shell id -g) -e HOME=/tmp -v $(CURDIR):/src -w /src \
+	  $(PLAYWRIGHT_IMAGE) sh -ec 'pip install -q --user --break-system-packages playwright==1.64.1; \
+	    python3 -m http.server 8002 --bind 127.0.0.1 -d site >/dev/null 2>&1 & sleep 1; \
+	    python3 scripts/a11y_check.py'
+
+zensical: generate  ## trial build with Zensical, Material's successor (pinned; not part of check)
+	uvx --from zensical==0.0.74 zensical build --clean
 
 serve: generate  ## live preview on http://127.0.0.1:$(PORT) (re-run `make generate` after editing post front matter)
 	$(UV) run mkdocs serve -a 127.0.0.1:$(PORT)

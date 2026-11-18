@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rossbeto.github.io/sitemap.xml

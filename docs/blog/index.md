@@ -1,3 +1,7 @@
+---
+description: Technical stories from my labs, bugs reproduced before fixing them, and what real systems taught my tests.
+---
+
 # Blog
 
 Technical stories from my labs: bugs I reproduced before fixing them, and what real systems

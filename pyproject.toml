@@ -49,6 +49,7 @@ allowed-confusables = ["–"]  # date ranges: "Sep 2019 – Present"
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S101", "S603", "S607", "PLR0913"]
+"scripts/social_images.py" = ["E501"]  # CSS inside Python strings
 
 [tool.mypy]
 strict = true

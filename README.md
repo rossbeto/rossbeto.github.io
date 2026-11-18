@@ -83,6 +83,19 @@ Private repos are never synced (no token); their pages stay hand-written with `r
 title over 60 characters, a description over 155, 2–5 tags, unknown keys, or a `[X]` gap stop the
 build and name the file.
 
+## Site quality
+
+| What | How |
+|---|---|
+| Share previews | every page has Open Graph / Twitter tags (title, description, one site card). After changing name, label or tagline: `make social-images`, commit the PNGs. Check a link with the [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) after deploy |
+| Search engines | `sitemap.xml` (from `site_url`), `docs/robots.txt`; key pages have their own `description` (a test checks) |
+| Fonts | Inter and JetBrains Mono are served from `docs/assets/fonts/` (`theme.font: false`): no request to Google Fonts |
+| Demo media | MP4 (`<video muted autoplay loop controls>`, with caption and label) instead of GIFs, about 8x smaller; the GIF stays as the fallback link |
+| Accessibility | `make a11y`: axe-core (WCAG 2.1 AA) on the built site, light and dark, in Docker; two known issues in Material's own markup are listed in `scripts/a11y_check.py` |
+| Performance | Lighthouse by hand (Chrome DevTools → Lighthouse) on home, CV, a project and a post |
+| Toolchain | `make zensical`: trial build with Zensical (pinned), Material's successor; it builds this site unchanged |
+| Analytics | none (no cookies, nothing to consent to). To add later: a cookie-free counter such as GoatCounter via Material's `extra.analytics` |
+
 ## Contact
 
 [Open an issue](https://github.com/rossbeto/rossbeto.github.io/issues/new?template=contact.yml)

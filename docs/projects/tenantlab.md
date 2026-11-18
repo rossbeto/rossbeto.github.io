@@ -1,5 +1,6 @@
 ---
 title: "tenantlab: a multi-tenant Django reference app"
+description: A multi-tenant Django lab with shard isolation in the ORM, secure partner iframes, read-your-writes replicas and a self-rolling-back deploy.
 summary: One Django codebase serving several partner companies, each on its own database shard, with a portal embedded in their sites and a self-rolling-back deploy.
 stage: active
 kind: lab
@@ -32,7 +33,14 @@ customer portal. The interesting parts are the ones that usually go wrong in pro
 - read replicas without "I just saved it and it's gone";
 - a deploy that undoes itself when the new release is unhealthy.
 
-![Demo: partner-a frames the portal, evil.test is refused, a cookieless tenant logs in with third-party cookies blocked](../assets/projects/tenantlab/demo.gif){ loading=lazy }
+<figure class="demo-video">
+  <video autoplay muted loop playsinline controls preload="auto" width="800" height="500" poster="../../assets/projects/tenantlab/poster.png"
+         aria-label="Demo: partner-a frames the portal, evil.test is refused, a cookieless tenant logs in with third-party cookies blocked">
+    <source src="../../assets/projects/tenantlab/demo.mp4" type="video/mp4">
+    <a href="../../assets/projects/tenantlab/demo.gif">Demo: partner-a frames the portal, evil.test is refused, a cookieless tenant logs in with third-party cookies blocked (animated GIF)</a>
+  </video>
+  <figcaption>Demo: partner-a frames the portal, evil.test is refused, a cookieless tenant logs in with third-party cookies blocked</figcaption>
+</figure>
 
 ## What I built
 
@@ -48,7 +56,14 @@ customer portal. The interesting parts are the ones that usually go wrong in pro
   artefact, 19 deploy steps, an atomic release switch, systemd socket activation, a health gate
   and automatic rollback, all testable as a normal user.
 
-![tlbuilder: the 19-step deploy plan and a dry-run deploy in the terminal](../assets/projects/tenantlab/tlb.gif){ loading=lazy }
+<figure class="demo-video">
+  <video autoplay muted loop playsinline controls preload="auto" width="1000" height="620"
+         aria-label="tlbuilder: the 19-step deploy plan and a dry-run deploy in the terminal">
+    <source src="../../assets/projects/tenantlab/tlb.mp4" type="video/mp4">
+    <a href="../../assets/projects/tenantlab/tlb.gif">tlbuilder: the 19-step deploy plan and a dry-run deploy in the terminal (animated GIF)</a>
+  </video>
+  <figcaption>tlbuilder: the 19-step deploy plan and a dry-run deploy in the terminal</figcaption>
+</figure>
 
 ## What it demonstrates
 

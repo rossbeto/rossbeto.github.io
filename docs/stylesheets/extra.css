@@ -87,3 +87,37 @@
   object-position: top left;
   border-radius: 0.2rem;
 }
+
+/* Demo videos on project pages (MP4 instead of GIF: ~8x smaller); controls let readers pause. */
+.md-typeset .demo-video { margin: 1.2em 0; }
+.md-typeset .demo-video video { width: 100%; height: auto; border-radius: 0.2rem; }
+.md-typeset .demo-video figcaption { max-width: none; font-size: 0.7rem; color: var(--md-default-fg-color--light); }
+
+/* Keyboard users see where they are (profile links, cards, buttons). */
+.md-typeset a:focus-visible,
+.profile__links a:focus-visible,
+.md-button:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+  border-radius: 0.1rem;
+}
+
+/* WCAG AA contrast (axe-core, Phase 007): Material's defaults miss 4.5:1 by a hair here. */
+[data-md-color-scheme="default"] {
+  --md-code-hl-comment-color: #616161;          /* was #717171 on #f5f5f5: 4.47 */
+}
+[data-md-color-scheme="slate"] {
+  --md-code-hl-constant-color: #a99ced;         /* builtins (self, len): was 4.48 */
+  --md-code-hl-number-color: #f08377;           /* numbers: was 4.44 */
+}
+[data-md-color-scheme="slate"] .md-typeset .md-button--primary {
+  background-color: #3d5bb5;                    /* white text: was 3.37 on #5e8bde */
+  border-color: #3d5bb5;
+}
+
+/* Links inside running text are underlined, not told apart by colour alone. */
+.md-typeset p a:not(.md-button):not(.cv-lab):not(.headerlink),
+.md-typeset li a:not(.md-button):not(.cv-lab):not(.headerlink) {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}

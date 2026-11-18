@@ -1,6 +1,7 @@
 ---
 title: "short-name: what it is in a few words"   # ≤ 60 characters
 summary: One or two sentences for the card (≤ 160 characters).
+description: For search results and share previews (≤ 160 characters).
 stage: active                  # active | done | archived (not `status`: Material reserves it)
 kind: lab                       # lab | work-public | oss  (labs are labelled as labs)
 repo: https://github.com/rossbeto/<repo>

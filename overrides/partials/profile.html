@@ -9,7 +9,7 @@
   <ul class="profile__links">
     {% for link in profile.links %}
       <li>
-        <a href="{{ link.url }}"{% if link.url.startswith("http") %} rel="noopener"{% endif %}>
+        <a href="{{ link.url }}"{% if "://" in link.url %} rel="noopener"{% endif %}>
           <span class="profile__icon">{% include ".icons/" ~ link.icon ~ ".svg" %}</span>{{ link.name }}
         </a>
       </li>
